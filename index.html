@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anapt AI Chatbot</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="chat-container">
+    <h1>Welcome to Anapt</h1>
+    <div id="chat-box"></div>
+    <input type="text" id="user-input" placeholder="Type your message...">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById('user-input');
+      const message = input.value;
+      if (!message) return;
+
+      // Display user message
+      const chatBox = document.getElementById('chat-box');
+      chatBox.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+      input.value = '';
+
+      // Send to server
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message }),
+      });
+      const data = await response.json();
+
+      // Display bot response
+      chatBox.innerHTML += `<p><strong>Anapt:</strong> ${data.reply}</p>`;
+    }
+  </script>
+</body>
+</html>
